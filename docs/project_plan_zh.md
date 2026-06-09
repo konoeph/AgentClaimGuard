@@ -595,7 +595,7 @@ Knowledge Retrieval → LLM → AgentClaimGuard Tool → Conditional Branch
 
 将 CETV 作为一种 Agent 策略。
 
-### 10.7 RAGFlow Adapter
+### 10.7 RAGFlow-Style Evidence Mapping
 
 形态：API adapter / post-verifier。
 
@@ -937,7 +937,7 @@ YAML 用于 policy 编写，JSON Schema 用于校验 policy 格式。
 内容：
 
 - Dify Tool Plugin；
-- RAGFlow adapter；
+- RAGFlow-style evidence mapping example；
 - HTTP 工作流示例。
 
 ### v0.5：LLM-as-Verifier 可选模块
