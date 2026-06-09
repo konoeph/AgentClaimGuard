@@ -2,6 +2,22 @@
 
 All notable changes to AgentClaimGuard will be documented in this file.
 
+## [0.4.3] - 2026-06-09
+
+### Added
+
+- Added a deterministic evaluation case suite under `examples/evaluation/`.
+- Added `examples/evaluation/run_eval.py` for benchmark-style contract checks.
+- Added evaluation cases for missing tools, valid tool-backed numeric claims,
+  missing evidence, invalid evidence references, missing compliance evidence,
+  conflicting evidence, and missing RAG citations.
+- Added `docs/evaluation.md` explaining evaluation scope, non-goals, and case
+  format.
+
+### Changed
+
+- Added a concise README Evaluation section linking to the eval runner and docs.
+
 ## [0.4.2] - 2026-06-09
 
 ### Added

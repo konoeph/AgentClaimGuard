@@ -333,6 +333,19 @@ Framework adapter LangGraph node / LangChain Runnable -> guard_result
 
 See [docs/adapters.md](docs/adapters.md) for when to use each pattern.
 
+## Evaluation
+
+Run the deterministic evaluation suite:
+
+```bash
+python examples/evaluation/run_eval.py
+```
+
+The suite checks policy/evidence/tool contract behavior. It is not a factuality
+benchmark.
+
+See [docs/evaluation.md](docs/evaluation.md) for case format and scope.
+
 ## Example Outputs
 
 See [docs/examples.md](docs/examples.md) for full sample output. Short version:
@@ -356,6 +369,7 @@ Claim -> Evidence -> Tool -> Verify
 - Adapter plan: [docs/adapters.md](docs/adapters.md)
 - Concepts: [docs/concepts.md](docs/concepts.md)
 - Limitations: [docs/limitations.md](docs/limitations.md)
+- Evaluation: [docs/evaluation.md](docs/evaluation.md)
 - Policy reference: [docs/policy.md](docs/policy.md)
 - Support checker design note: [docs/support_checkers.md](docs/support_checkers.md)
 - LangChain demo: [examples/langchain_guard/demo.py](examples/langchain_guard/demo.py)

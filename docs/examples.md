@@ -11,6 +11,7 @@ HTTP tool          examples/dify_http_tool
 Evidence mapping  examples/ragflow_evidence
 Framework adapter examples/langgraph_guard, examples/langchain_guard
 Claim preparation examples/claim_extraction
+Evaluation        examples/evaluation
 Core runtime       examples/numeric_conclusion, examples/rag_citation
 ```
 
