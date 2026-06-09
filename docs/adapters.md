@@ -30,7 +30,7 @@ verification result.
 Use this pattern for Dify-style tools, no-code workflow builders, and services
 that can make JSON HTTP requests.
 
-### Evidence Provider Pattern
+### Evidence Mapping Pattern
 
 Use this when a RAG system already retrieves context chunks.
 
@@ -285,9 +285,9 @@ blocked -> repair, retrieve more evidence, or human review
 This is not a full Dify plugin package. It is a minimal HTTP tool integration
 example that reuses the server API.
 
-## RAGFlow Evidence Provider
+## RAGFlow-Style Evidence Mapping
 
-The RAGFlow integration path maps retrieved chunks into AgentClaimGuard
+The RAGFlow-style evidence mapping example maps retrieved chunks into AgentClaimGuard
 `Evidence` records. This keeps retrieval in the RAG system and verification in
 AgentClaimGuard:
 
@@ -307,9 +307,9 @@ A retrieved chunk can become an evidence record by preserving:
 
 See `examples/ragflow_evidence/` for a copyable mapping example.
 
-This is not a RAGFlow plugin, vector search implementation, or ranking layer.
-It is an evidence-provider pattern for workflows that already have retrieved
-chunks.
+This is not a RAGFlow adapter, plugin, vector search implementation, ranking
+layer, or answer-generation layer. It is an evidence mapping example for
+workflows that already have retrieved chunks.
 
 ## Planned Adapters
 
@@ -319,9 +319,9 @@ chunks.
   - Expose policy-backed assertions as reusable pipeline checks.
 - Dify plugin package
   - Extend the HTTP tool pattern into a packaged integration if there is demand.
-- RAGFlow plugin package
-  - Extend the evidence-provider pattern into a packaged integration if there is
-    demand.
+- Possible RAGFlow plugin package
+  - Future work only. Current support is a RAGFlow-style evidence mapping
+    example, not a RAGFlow adapter or plugin.
 
 ## Design Goal
 

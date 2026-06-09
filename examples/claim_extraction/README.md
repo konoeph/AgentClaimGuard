@@ -1,7 +1,6 @@
 # Claim Extraction Helper Example
 
-This example shows the optional claim extraction helper introduced for the
-`v0.4.0` line.
+This example shows the optional claim extraction helper.
 
 The helper is deterministic. It does not call an LLM and does not verify truth.
 It only converts user-provided claim-like items into structured

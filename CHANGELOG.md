@@ -2,11 +2,33 @@
 
 All notable changes to AgentClaimGuard will be documented in this file.
 
+## [0.4.2] - 2026-06-09
+
+### Added
+
+- Added `docs/limitations.md` to document what AgentClaimGuard does and does
+  not guarantee.
+- Added `docs/concepts.md` to define the core schema objects and result fields.
+- Added `docs/policy.md` to document current YAML policy fields with numeric
+  and compliance examples.
+- Added `docs/support_checkers.md` as a v0.5 design note for optional semantic
+  support checker backends.
+- Added blocked and passed numeric conclusion example payloads.
+
+### Changed
+
+- Replaced the empty README quickstart with a runnable numeric-conclusion
+  example that blocks when calculator output is missing.
+- Reframed README positioning around claim-level evidence and policy gating.
+- Clarified that AgentClaimGuard does not prove factual truth, detect all
+  hallucinations, or perform semantic entailment checks by default.
+- Renamed RAGFlow wording to a RAGFlow-style evidence mapping example.
+
 ## [0.4.1] - 2026-05-28
 
 ### Added
 
-- Added a RAGFlow-style evidence provider example that maps retrieved chunks
+- Added a RAGFlow-style evidence mapping example that maps retrieved chunks
   into AgentClaimGuard `Evidence` records.
 - Added platform integration pattern documentation for HTTP tools, evidence
   providers, and framework adapters.

@@ -32,14 +32,15 @@
 - structured output conversion helpers
 - more OpenAPI usage examples
 
-## v0.4.0 Platform Integrations
+## v0.4.x Platform Integration Examples
 
-- Dify tool plugin
-- RAGFlow adapter
+- Dify HTTP tool example
+- RAGFlow-style evidence mapping example
 - integration examples
 
-## v0.5.0 Optional LLM Verifier
+## v0.5.0 Optional Support Checkers
 
-- semantic support checks
+- optional semantic support checks
 - contradiction checks
-- configurable model interface
+- configurable custom / LLM / NLI backends
+- no mandatory LLM dependency in the core verifier

@@ -10,14 +10,16 @@ Install from PyPI:
 pip install agentclaimguard
 ```
 
-AgentClaimGuard is a framework-agnostic evidence gate for LLM agent claims.
+AgentClaimGuard is a lightweight claim-level evidence and policy gate for LLM
+agent claims.
 
-It verifies whether important claims in LLM outputs are supported by evidence,
-tool results, and user-defined policies.
+It checks whether structured claims are allowed under user-defined evidence,
+tool-result, and policy contracts.
 
 AgentClaimGuard does not decide whether a claim is true by itself. It verifies
 whether a claim is allowed to be returned under a user-defined evidence and tool
-policy.
+policy. It is not a full factuality verifier, hallucination detector, semantic
+entailment engine, or mature production guardrail framework.
 
 AgentClaimGuard is released under Apache-2.0 to support open-source, research,
 and commercial integration across LLM agent applications.
@@ -33,7 +35,8 @@ the key claims are unsupported.
 
 RAG gives context, but does not guarantee the answer is grounded. Tool calling
 gives results, but does not guarantee the model uses them. Structured output
-gives JSON, but does not guarantee the judgment is valid.
+gives JSON, but does not guarantee the judgment satisfies an evidence and tool
+contract.
 
 AgentClaimGuard adds a lightweight runtime layer to verify claims before they are
 returned to users.
@@ -90,10 +93,39 @@ pip install agentclaimguard
 ```python
 from agentclaimguard import AgentClaimGuard, Policy
 
-guard = AgentClaimGuard(Policy.load_builtin("generic_strict"))
-result = guard.verify(claims=[], evidence=[], tool_results=[])
+claims = [
+    {
+        "id": "claim_1",
+        "type": "numeric_conclusion",
+        "text": "Revenue increased by 15%.",
+        "evidence_refs": ["ev_1", "ev_2"],
+        "tool_result_refs": [],
+    }
+]
 
+evidence = [
+    {"id": "ev_1", "type": "source_fact", "content": "Revenue was 115."},
+    {"id": "ev_2", "type": "source_fact", "content": "Revenue was 100."},
+]
+
+result = AgentClaimGuard(Policy.load_builtin("generic_numeric")).verify(
+    claims=claims,
+    evidence=evidence,
+    tool_results=[],
+)
+
+claim_result = result.claim_results[0]
 print(result.status)
+print(claim_result.status)
+print(claim_result.safe_verdict)
+```
+
+Expected output:
+
+```text
+blocked
+tool_required
+insufficient_evidence
 ```
 
 To run the FastAPI server:
@@ -272,7 +304,7 @@ Extraction != Verification
 See [examples/claim_extraction/README.md](examples/claim_extraction/README.md)
 for a minimal extraction-to-verification demo.
 
-## RAGFlow Evidence Provider
+## RAGFlow-Style Evidence Mapping
 
 RAGFlow-style retrieved chunks can be mapped into AgentClaimGuard `Evidence`
 records before verification:
@@ -283,7 +315,8 @@ RAGFlow / RAG system retrieves chunks
         -> AgentClaimGuard.verify(...)
 ```
 
-This is a mapping pattern, not a RAGFlow plugin or retrieval engine.
+This is a mapping pattern, not a RAGFlow plugin or retrieval engine. It does
+not perform retrieval, ranking, or answer generation.
 
 See [examples/ragflow_evidence/README.md](examples/ragflow_evidence/README.md)
 for a copyable chunk-to-evidence example.
@@ -294,7 +327,7 @@ AgentClaimGuard can be embedded in three common ways:
 
 ```text
 HTTP tool          Dify / workflow platform -> POST /v1/verify
-Evidence provider RAGFlow / RAG system -> Evidence[]
+Evidence mapping  RAGFlow / RAG system -> Evidence[]
 Framework adapter LangGraph node / LangChain Runnable -> guard_result
 ```
 
@@ -321,19 +354,25 @@ Claim -> Evidence -> Tool -> Verify
 - Open issues: [GitHub Issues](https://github.com/konoeph/AgentClaimGuard/issues)
 - Roadmap: [docs/roadmap.md](docs/roadmap.md)
 - Adapter plan: [docs/adapters.md](docs/adapters.md)
+- Concepts: [docs/concepts.md](docs/concepts.md)
+- Limitations: [docs/limitations.md](docs/limitations.md)
+- Policy reference: [docs/policy.md](docs/policy.md)
+- Support checker design note: [docs/support_checkers.md](docs/support_checkers.md)
 - LangChain demo: [examples/langchain_guard/demo.py](examples/langchain_guard/demo.py)
 - Claim extraction demo: [examples/claim_extraction/demo.py](examples/claim_extraction/demo.py)
 - Dify HTTP tool example: [examples/dify_http_tool/README.md](examples/dify_http_tool/README.md)
-- RAGFlow evidence example: [examples/ragflow_evidence/README.md](examples/ragflow_evidence/README.md)
+- RAGFlow-style evidence mapping example: [examples/ragflow_evidence/README.md](examples/ragflow_evidence/README.md)
 - Troubleshooting: [docs/troubleshooting.md](docs/troubleshooting.md)
 - Release checklist: [docs/release_checklist.md](docs/release_checklist.md)
 
 ## What AgentClaimGuard Is Not
 
 AgentClaimGuard is not an agent framework, RAG engine, vector database, or
-general-purpose safety guardrail.
+general-purpose safety guardrail. It is also not a factuality verifier,
+hallucination detector, or semantic entailment checker by default.
 
-It is a claim-level reliability layer for LLM applications.
+It is a structured claim verification SDK for checking evidence, tool-result,
+and policy contracts.
 
 ## License
 

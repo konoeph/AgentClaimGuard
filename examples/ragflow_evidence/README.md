@@ -1,11 +1,11 @@
-# RAGFlow Evidence Provider Example
+# RAGFlow-Style Evidence Mapping Example
 
 This example shows how to map RAGFlow-style retrieved chunks into
 AgentClaimGuard `Evidence` records.
 
-It is not a RAGFlow plugin and does not perform retrieval, vector search,
-ranking, or answer generation. It only demonstrates the evidence-provider
-boundary:
+It is not a RAGFlow adapter or plugin and does not perform retrieval, vector
+search, ranking, or answer generation. It only demonstrates the evidence
+mapping boundary:
 
 ```text
 RAGFlow / RAG system retrieves chunks

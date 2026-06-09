@@ -23,10 +23,10 @@ Submit a verification request:
 ```bash
 curl -X POST http://127.0.0.1:8000/v1/verify \
   -H "Content-Type: application/json" \
-  -d @examples/numeric_conclusion/sample_input.json
+  -d @examples/numeric_conclusion/sample_blocked.json
 ```
 
-See [examples.md](examples.md) for the expected outputs from all three demos.
+See [examples.md](examples.md) for expected outputs from the bundled demos.
 
 Run the LangGraph adapter demo:
 

@@ -8,7 +8,7 @@ Use the examples by integration pattern:
 
 ```text
 HTTP tool          examples/dify_http_tool
-Evidence provider examples/ragflow_evidence
+Evidence mapping  examples/ragflow_evidence
 Framework adapter examples/langgraph_guard, examples/langchain_guard
 Claim preparation examples/claim_extraction
 Core runtime       examples/numeric_conclusion, examples/rag_citation
@@ -18,16 +18,14 @@ Core runtime       examples/numeric_conclusion, examples/rag_citation
 
 ```text
 $ python examples/numeric_conclusion/demo.py
-{
-  "status": "blocked",
-  "claim_results": [
-    {
-      "claim_id": "claim_1",
-      "status": "tool_required",
-      "safe_verdict": "insufficient_evidence"
-    }
-  ]
-}
+blocked_status=blocked
+blocked_claim_status=tool_required
+blocked_violations=2
+blocked_safe_output={'blocked_claims': [{'claim_id': 'claim_1', 'safe_verdict': 'insufficient_evidence', 'reason': 'Numeric conclusions require source facts and calculation results.', 'status': 'tool_required'}]}
+passed_status=passed
+passed_claim_status=passed
+passed_violations=0
+passed_safe_output={'blocked_claims': []}
 ```
 
 ## Compliance Judgment
@@ -130,9 +128,9 @@ Invalid claim-like items are collected in `skipped_items` with corresponding
 `warnings`, so users can inspect extraction failures without stopping an entire
 batch.
 
-## RAGFlow Evidence Provider
+## RAGFlow-Style Evidence Mapping
 
-The RAGFlow evidence provider example maps retrieved chunks into
+The RAGFlow-style evidence mapping example maps retrieved chunks into
 AgentClaimGuard `Evidence` records before verification.
 
 ```text
@@ -145,6 +143,6 @@ claim_status=tool_required
 safe_verdict=insufficient_evidence
 ```
 
-This is a mapping example, not a RAGFlow plugin. Retrieval and ranking stay in
-the RAG system; AgentClaimGuard verifies structured claims against evidence,
-tool results, and policy.
+This is a mapping example, not a RAGFlow adapter or plugin. Retrieval, ranking,
+and answer generation stay in the RAG system; AgentClaimGuard verifies
+structured claims against evidence, tool results, and policy.

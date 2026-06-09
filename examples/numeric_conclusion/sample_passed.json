@@ -1,0 +1,42 @@
+{
+  "claims": [
+    {
+      "id": "claim_1",
+      "type": "numeric_conclusion",
+      "text": "Revenue increased by 15%.",
+      "evidence_refs": ["ev_1", "ev_2"],
+      "tool_result_refs": ["tool_1"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev_1",
+      "type": "source_fact",
+      "source": "annual_report.pdf",
+      "locator": "page 12, table 3",
+      "content": "Revenue in 2025 was 115 million yuan."
+    },
+    {
+      "id": "ev_2",
+      "type": "source_fact",
+      "source": "annual_report.pdf",
+      "locator": "page 10, table 3",
+      "content": "Revenue in 2024 was 100 million yuan."
+    }
+  ],
+  "tool_results": [
+    {
+      "id": "tool_1",
+      "tool_name": "calculator",
+      "status": "success",
+      "input": {
+        "expression": "(115 - 100) / 100"
+      },
+      "output": {
+        "value": 0.15,
+        "format": "15%"
+      },
+      "evidence_refs": ["ev_1", "ev_2"]
+    }
+  ]
+}
