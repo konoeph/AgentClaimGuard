@@ -1,5 +1,10 @@
 """LangChain adapter for claim-level evidence gating."""
 
+from .middleware import (
+    ClaimGuardMiddleware,
+    ClaimVerificationError,
+    create_claim_guard_middleware,
+)
 from .runnable import GuardedRunnable, create_guarded_runnable
 from .types import (
     FieldExtractor,
@@ -9,6 +14,9 @@ from .types import (
 )
 
 __all__ = [
+    "ClaimGuardMiddleware",
+    "ClaimVerificationError",
+    "create_claim_guard_middleware",
     "FieldExtractor",
     "FieldMapper",
     "GuardedRunnable",
