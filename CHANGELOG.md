@@ -2,6 +2,15 @@
 
 All notable changes to AgentClaimGuard will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Aligned the LangChain middleware adapter with the structured claim schema and
+  current `VerificationResult` fields.
+- Updated LangChain middleware tests to use the built-in numeric policy and real
+  evidence/tool-result contracts.
+
 ## [0.4.3] - 2026-06-09
 
 ### Added

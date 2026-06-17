@@ -1,7 +1,5 @@
 """Tests for LangChain middleware adapter."""
 
-from unittest.mock import MagicMock, patch
-
 import pytest
 
 from agentclaimguard.adapters.langchain.middleware import (
@@ -14,15 +12,72 @@ from agentclaimguard.core.result import VerificationResult
 
 
 @pytest.fixture
-def policy():
-    return Policy(confidence_threshold=0.8)
+def policy() -> Policy:
+    return Policy.load_builtin("generic_numeric")
 
 
 @pytest.fixture
-def sample_input():
+def sample_input() -> dict:
+    return _passed_numeric_input()
+
+
+def _passed_numeric_input() -> dict:
     return {
-        "claims": [{"text": "The sky is blue", "confidence": 0.9}],
-        "evidence": [{"text": "Observation confirms blue sky", "source": "visual"}],
+        "claims": [
+            {
+                "id": "claim_1",
+                "type": "numeric_conclusion",
+                "text": "Revenue increased by 15%.",
+                "evidence_refs": ["ev_1", "ev_2"],
+                "tool_result_refs": ["tool_1"],
+            }
+        ],
+        "evidence": [
+            {
+                "id": "ev_1",
+                "type": "source_fact",
+                "content": "Revenue was 115.",
+            },
+            {
+                "id": "ev_2",
+                "type": "source_fact",
+                "content": "Revenue was 100.",
+            },
+        ],
+        "tool_results": [
+            {
+                "id": "tool_1",
+                "tool_name": "calculator",
+                "status": "success",
+                "output": {"growth_rate": "15%"},
+            }
+        ],
+    }
+
+
+def _blocked_numeric_input() -> dict:
+    return {
+        "claims": [
+            {
+                "id": "claim_1",
+                "type": "numeric_conclusion",
+                "text": "Revenue increased by 15%.",
+                "evidence_refs": ["ev_1", "ev_2"],
+                "tool_result_refs": [],
+            }
+        ],
+        "evidence": [
+            {
+                "id": "ev_1",
+                "type": "source_fact",
+                "content": "Revenue was 115.",
+            },
+            {
+                "id": "ev_2",
+                "type": "source_fact",
+                "content": "Revenue was 100.",
+            },
+        ],
         "tool_results": [],
     }
 
@@ -32,8 +87,18 @@ class TestClaimGuardMiddleware:
         """Warn mode should always pass through input unchanged."""
         middleware = ClaimGuardMiddleware(policy=policy, mode="warn")
         result = middleware(sample_input, config={})
-        assert result == sample_input
+        assert result is sample_input
         assert "guard_result" not in result
+
+    def test_warn_mode_logs_failed_claim(self, policy, caplog):
+        """Warn mode should log blocked structured claims without raising."""
+        middleware = ClaimGuardMiddleware(policy=policy, mode="warn")
+        blocked_input = _blocked_numeric_input()
+
+        result = middleware(blocked_input, config={})
+
+        assert result is blocked_input
+        assert "ClaimGuard: 1/1 claims failed verification" in caplog.text
 
     def test_attach_mode_adds_result(self, policy, sample_input):
         """Attach mode should add verification result to input."""
@@ -41,17 +106,16 @@ class TestClaimGuardMiddleware:
         result = middleware(sample_input, config={})
         assert "guard_result" in result
         assert isinstance(result["guard_result"], VerificationResult)
+        assert result["guard_result"].status == "passed"
 
     def test_block_mode_raises_on_failure(self, policy):
         """Block mode should raise ClaimVerificationError on failed claims."""
         middleware = ClaimGuardMiddleware(policy=policy, mode="block")
-        bad_input = {
-            "claims": [{"text": "False claim", "confidence": 0.1}],
-            "evidence": [],
-            "tool_results": [],
-        }
-        with pytest.raises(ClaimVerificationError):
-            middleware(bad_input, config={})
+        with pytest.raises(ClaimVerificationError) as exc_info:
+            middleware(_blocked_numeric_input(), config={})
+
+        assert exc_info.value.result.status == "blocked"
+        assert exc_info.value.result.claim_results[0].status == "tool_required"
 
     def test_no_claims_passes_through(self, policy):
         """Input without claims should pass through unchanged."""
@@ -72,6 +136,7 @@ class TestClaimGuardMiddleware:
         )
         result = middleware(sample_input, config={})
         assert "verification" in result
+        assert result["verification"].status == "passed"
         assert "guard_result" not in result
 
 
